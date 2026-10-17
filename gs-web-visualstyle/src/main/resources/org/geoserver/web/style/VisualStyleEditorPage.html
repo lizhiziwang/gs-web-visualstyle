@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+  <title><wicket:message key="VisualStyleEditorPage.title">可视化样式编辑器</wicket:message></title>
+</head>
+<body>
+<wicket:extend>
+
+  <form wicket:id="visualForm" id="vs-visual-form" class="vs-form" autocomplete="off">
+    <!--
+        状态回推通道：Wicket 的 TextField 只接受 type="text"，
+        因此用 display:none 的文本框承载（display:none 的元素仍可接收程序化事件）。
+      -->
+    <input type="text" wicket:id="vsPush" id="vsPush" class="vs-sync-input" value=""
+           tabindex="-1" aria-hidden="true"/>
+
+    <!-- ============ 顶部工具栏 ============ -->
+    <div class="vs-toolbar">
+      <div class="vs-toolbar-group">
+        <a href="#" class="button primary" wicket:id="save">
+          <wicket:message key="VisualStyleEditorPage.save">保存样式</wicket:message>
+        </a>
+        <a href="#" class="button outline-primary" wicket:id="apply">
+          <wicket:message key="VisualStyleEditorPage.apply">保存并应用</wicket:message>
+        </a>
+        <a href="#" class="button" wicket:id="bindLayer">
+          <wicket:message key="VisualStyleEditorPage.bindLayer">绑定为图层默认样式</wicket:message>
+        </a>
+      </div>
+      <div class="vs-toolbar-group">
+        <a href="#" class="button" wicket:id="validate">
+          <wicket:message key="VisualStyleEditorPage.validate">校验</wicket:message>
+        </a>
+        <a href="#" class="button" wicket:id="parseSource">
+          <wicket:message key="VisualStyleEditorPage.parseSource">源码 → 表单</wicket:message>
+        </a>
+        <a href="#" class="button" wicket:id="generateSource">
+          <wicket:message key="VisualStyleEditorPage.generateSource">表单 → 源码</wicket:message>
+        </a>
+      </div>
+      <div class="vs-toolbar-status" id="vs-status">
+        <span id="vs-status-text" class="vs-status-text"></span>
+      </div>
+    </div>
+
+    <!-- ============ 三栏主体 ============ -->
+    <div class="vs-layout">
+      <aside class="vs-col vs-col-left">
+        <div wicket:id="navigationPanel">navigation</div>
+      </aside>
+
+      <section class="vs-col vs-col-center">
+        <div wicket:id="tabs">tabs</div>
+      </section>
+
+      <aside class="vs-col vs-col-right">
+        <div wicket:id="previewPanel">preview</div>
+      </aside>
+    </div>
+
+    <!-- ============ 底部源码视图 ============ -->
+    <div class="vs-source-strip" id="vs-source-strip">
+      <div class="vs-source-head">
+        <span class="vs-source-title">
+          <wicket:message key="VisualStyleEditorPage.sourceView">源码视图</wicket:message>
+        </span>
+        <div class="vs-source-tabs" id="vs-source-tabs">
+          <button type="button" class="vs-chip vs-chip-active" data-format="sld">SLD 1.1</button>
+          <button type="button" class="vs-chip" data-format="css">GeoCSS</button>
+        </div>
+        <div class="vs-source-actions">
+          <span class="vs-err-count" id="vs-err-count"></span>
+          <button type="button" class="vs-mini-btn" id="vs-source-toggle">收起</button>
+          <button type="button" class="vs-mini-btn" id="vs-source-copy">复制</button>
+        </div>
+      </div>
+      <div class="vs-source-body" id="vs-source-body">
+        <pre class="vs-code"><ol class="vs-code-lines" id="vs-code-lines"></ol></pre>
+        <div class="vs-source-placeholder" id="vs-source-placeholder"></div>
+      </div>
+    </div>
+
+    <div class="vs-hint">
+      <wicket:message key="VisualStyleEditorPage.hint">
+        提示：修改任意表单字段即自动重建 SLD 并刷新右侧预览；预览通过 SLD_BODY POST 提交，因此无需先保存。
+      </wicket:message>
+    </div>
+  </form>
+
+</wicket:extend>
+</body>
+</html>

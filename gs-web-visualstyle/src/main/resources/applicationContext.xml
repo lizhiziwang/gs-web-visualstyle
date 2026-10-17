@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  GeoServer 可视化样式编辑面板插件（gs-web-visualstyle）的 Spring 配置。
+
+  加载机制：GeoServer 3.0.1 的 web.xml 通过
+      <context-param>contextConfigLocation = classpath*:/applicationContext.xml</context-param>
+  自动加载所有 jar 根目录下的 applicationContext.xml，因此本文件放在 jar 根目录即可生效，
+  无需修改 GeoServer 核心源码。
+
+  注意：本文件不使用 <import> / 依赖外部队列，保持最小耦合；所有 bean 都只依赖 GeoServer 自身
+  已注册的 bean（dataCategory / workspaceAdminAuthorizer 由 gs-web-core 提供）。
+-->
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <!-- ============================================================
+       模块状态：会出现在「关于 / 状态」页面，便于确认插件已加载
+       ============================================================ -->
+  <bean id="visualStyleModule" class="org.geoserver.platform.ModuleStatusImpl">
+    <constructor-arg index="0" value="gs-web-visualstyle"/>
+    <constructor-arg index="1" value="Visual Style Editor (可视化样式编辑面板)"/>
+    <property name="category" value="EXTENSION"/>
+  </bean>
+
+  <!-- ============================================================
+       服务层：全部为无状态单例，线程安全
+       ============================================================ -->
+  <bean id="visualStyleCompiler" class="org.geoserver.web.style.service.StyleCompiler"/>
+
+  <bean id="visualStyleSerializationService"
+        class="org.geoserver.web.style.service.StyleSerializationService"/>
+
+  <bean id="visualStyleMetadataService"
+        class="org.geoserver.web.style.service.LayerMetadataService"/>
+
+  <bean id="visualStyleClassificationService"
+        class="org.geoserver.web.style.service.ClassificationService"/>
+
+  <bean id="visualStylePersistService"
+        class="org.geoserver.web.style.service.StylePersistService"/>
+
+  <bean id="visualStylePermissionService"
+        class="org.geoserver.web.style.service.StylePermissionService">
+    <!-- 是否启用 ROLE_STYLE_EDIT 细粒度角色（默认 true；未配置该角色时自动无效） -->
+    <property name="granularRoleEnabled" value="true"/>
+  </bean>
+
+  <!-- ============================================================
+       页面注册：
+       1) 作为「数据」菜单下的一项，入口紧跟原生「Styles」；
+       2) 同时保留可书签化 URL：
+          /geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.style.VisualStyleEditorPage
+       ============================================================ -->
+  <bean id="visualStyleMenuPage" class="org.geoserver.web.MenuPageInfo">
+    <property name="id" value="visualStyle.editor"/>
+    <property name="titleKey" value="VisualStyleEditorPage.menuTitle"/>
+    <property name="descriptionKey" value="VisualStyleEditorPage.menuDescription"/>
+    <property name="componentClass" value="org.geoserver.web.style.VisualStyleEditorPage"/>
+    <property name="category" ref="dataCategory"/>
+    <property name="icon" value="gs-icon-palette"/>
+    <property name="order" value="31"/>
+    <property name="authorizer" ref="workspaceAdminAuthorizer"/>
+    <property name="contextParams" value="all"/>
+  </bean>
+
+  <!-- Wicket 应用初始化钩子：仅用于启动日志与能力自检 -->
+  <bean id="visualStyleApplicationInitializer"
+        class="org.geoserver.web.style.VisualStyleEditorInitializer"/>
+
+</beans>

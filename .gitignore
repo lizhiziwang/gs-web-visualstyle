@@ -1,0 +1,31 @@
+# ---- 构建产物 ----
+target/
+*.class
+*.jar
+*.war
+
+# ---- 参考/工作目录（由 tools 脚本再生，不入库）----
+.gs-jars/
+.ref-jars/
+.ref-src/
+.ref-classes/
+.ref-api/
+.ref-html/
+.tools/
+
+# ---- IDE 配置 ----
+.idea/
+*.iml
+.vscode/
+
+# ---- 本地工作笔记/调试记录（不入库）----
+.workbuddy/
+*.log
+
+# ---- tools/ 下的调试/诊断脚本（仅保留 README 中列出的官方工具）----
+tools/diag*.js
+tools/diag*.py
+tools/diag_*.js
+tools/browser_verify*.js
+tools/check_render.py
+tools/tmp/

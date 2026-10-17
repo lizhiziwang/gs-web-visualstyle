@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head/>
+<body>
+<wicket:panel>
+
+  <div class="vs-panel vs-panel-text">
+
+    <!-- ============ 开关 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="TextSymbolizerPanel.title">标注 TextSymbolizer</wicket:message>
+      </div>
+      <label class="vs-check vs-big-check">
+        <input type="checkbox" name="vs.labelEnabled" id="vs.labelEnabled" value="true"/>
+        <span><wicket:message key="TextSymbolizerPanel.enable">启用标注</wicket:message></span>
+      </label>
+    </div>
+
+    <!-- ============ 标注内容 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="TextSymbolizerPanel.content">标注内容</wicket:message>
+      </div>
+      <div class="vs-grid2">
+        <div class="vs-field vs-span2">
+          <label class="vs-label" for="vs.labelField">
+            <wicket:message key="TextSymbolizerPanel.field">标注字段 / 表达式（支持 CQL，如 concat(NAME,' ',POP)）</wicket:message>
+          </label>
+          <input type="text" class="vs-input" name="vs.labelField" id="vs.labelField" value=""/>
+          <select class="vs-input vs-select vs-insert-field" id="vs-label-field-picker"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.labelGroupField">
+            <wicket:message key="TextSymbolizerPanel.group">分组避让字段（VendorOption group，可空）</wicket:message>
+          </label>
+          <input type="text" class="vs-input" name="vs.labelGroupField" id="vs.labelGroupField" value=""/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.labelRotationField">
+            <wicket:message key="TextSymbolizerPanel.rotationField">旋转角度字段（可空）</wicket:message>
+          </label>
+          <input type="text" class="vs-input" name="vs.labelRotationField" id="vs.labelRotationField" value=""/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 字体 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="TextSymbolizerPanel.font">字体</wicket:message>
+      </div>
+      <div class="vs-grid2">
+        <div class="vs-field vs-span2">
+          <label class="vs-label" for="vs.fontFamily">
+            <wicket:message key="TextSymbolizerPanel.family">字体族（逗号分隔，按序回退）</wicket:message>
+          </label>
+          <input type="text" class="vs-input" name="vs.fontFamily" id="vs.fontFamily"
+                 value="Microsoft YaHei, Noto Sans CJK SC, DejaVu Sans, sans-serif"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="TextSymbolizerPanel.size">字号</wicket:message>
+            <output class="vs-out" data-for="vs.fontSize">12</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.fontSize" id="vs.fontSize"
+                 min="6" max="72" step="1" value="12"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label"><wicket:message key="TextSymbolizerPanel.color">文字颜色</wicket:message></label>
+          <div class="vs-color-row">
+            <input type="color" class="vs-color" data-target="vs.fontColor" value="#222222"/>
+            <input type="text" class="vs-input vs-hex" name="vs.fontColor" id="vs.fontColor" value="#222222"/>
+          </div>
+        </div>
+        <div class="vs-field vs-field-check">
+          <label class="vs-check">
+            <input type="checkbox" name="vs.fontBold" id="vs.fontBold" value="true"/>
+            <span><wicket:message key="TextSymbolizerPanel.bold">粗体</wicket:message></span>
+          </label>
+          <label class="vs-check">
+            <input type="checkbox" name="vs.fontItalic" id="vs.fontItalic" value="true"/>
+            <span><wicket:message key="TextSymbolizerPanel.italic">斜体</wicket:message></span>
+          </label>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="TextSymbolizerPanel.opacity">文字透明度</wicket:message>
+            <output class="vs-out" data-for="vs.fontOpacity">1</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.fontOpacity" id="vs.fontOpacity"
+                 min="0" max="1" step="0.01" value="1"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Halo 光晕 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="TextSymbolizerPanel.halo">Halo 光晕</wicket:message>
+      </div>
+      <label class="vs-check">
+        <input type="checkbox" name="vs.haloEnabled" id="vs.haloEnabled" value="true"/>
+        <span><wicket:message key="TextSymbolizerPanel.haloEnable">启用光晕</wicket:message></span>
+      </label>
+      <div class="vs-grid2">
+        <div class="vs-field">
+          <label class="vs-label"><wicket:message key="TextSymbolizerPanel.haloColor">光晕颜色</wicket:message></label>
+          <div class="vs-color-row">
+            <input type="color" class="vs-color" data-target="vs.haloColor" value="#ffffff"/>
+            <input type="text" class="vs-input vs-hex" name="vs.haloColor" id="vs.haloColor" value="#ffffff"/>
+          </div>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="TextSymbolizerPanel.haloRadius">光晕半径</wicket:message>
+            <output class="vs-out" data-for="vs.haloRadius">1.5</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.haloRadius" id="vs.haloRadius"
+                 min="0" max="8" step="0.1" value="1.5"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 位置与避让 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="TextSymbolizerPanel.placement">位置与避让</wicket:message>
+      </div>
+      <div class="vs-grid2">
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="TextSymbolizerPanel.offsetX">水平偏移</wicket:message>
+            <output class="vs-out" data-for="vs.labelOffsetX">0</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.labelOffsetX" id="vs.labelOffsetX"
+                 min="-60" max="60" step="1" value="0"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="TextSymbolizerPanel.offsetY">垂直偏移</wicket:message>
+            <output class="vs-out" data-for="vs.labelOffsetY">-10</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.labelOffsetY" id="vs.labelOffsetY"
+                 min="-60" max="60" step="1" value="-10"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.labelAnchor">
+            <wicket:message key="TextSymbolizerPanel.anchor">锚点（沿线标注）</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.labelAnchor" id="vs.labelAnchor">
+            <option value="start">start</option>
+            <option value="middle">middle</option>
+            <option value="end">end</option>
+          </select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="TextSymbolizerPanel.spaceAround">最小避让间距（像素）</wicket:message>
+            <output class="vs-out" data-for="vs.labelSpaceAround">10</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.labelSpaceAround" id="vs.labelSpaceAround"
+                 min="0" max="60" step="1" value="10"/>
+        </div>
+        <div class="vs-field vs-field-check">
+          <label class="vs-check">
+            <input type="checkbox" name="vs.labelDisplacement" id="vs.labelDisplacement" value="true"/>
+            <span><wicket:message key="TextSymbolizerPanel.displacement">启用标注避让（conflictResolution）</wicket:message></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 标注比例尺 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="TextSymbolizerPanel.scale">标注比例尺开关</wicket:message>
+      </div>
+      <label class="vs-check">
+        <input type="checkbox" name="vs.labelScaleEnabled" id="vs.labelScaleEnabled" value="true"/>
+        <span><wicket:message key="TextSymbolizerPanel.scaleEnable">仅在指定比例尺区间显示标注</wicket:message></span>
+      </label>
+      <div class="vs-grid2">
+        <div class="vs-field">
+          <label class="vs-label" for="vs.labelMinScale">
+            <wicket:message key="TextSymbolizerPanel.minScale">最小比例尺分母（0 不限）</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.labelMinScale" id="vs.labelMinScale"
+                 min="0" step="1000" value="0"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.labelMaxScale">
+            <wicket:message key="TextSymbolizerPanel.maxScale">最大比例尺分母（0 不限）</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.labelMaxScale" id="vs.labelMaxScale"
+                 min="0" step="1000" value="0"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="vs-preview-note">
+      <wicket:message key="TextSymbolizerPanel.previewNote">
+        标注效果请在右侧预览地图中查看；标注避让由 GeoServer 渲染引擎在地图渲染阶段计算，
+        在 SLD 中表现为 VendorOption。
+      </wicket:message>
+    </div>
+
+  </div>
+
+</wicket:panel>
+</body>
+</html>

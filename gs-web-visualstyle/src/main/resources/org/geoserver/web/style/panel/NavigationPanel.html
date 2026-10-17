@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head/>
+<body>
+<wicket:panel>
+
+  <!-- ================= 工作区 ================= -->
+  <div class="vs-block">
+    <div class="vs-block-title">
+      <wicket:message key="NavigationPanel.workspace">工作区</wicket:message>
+    </div>
+    <select wicket:id="workspaceChoice" class="vs-input vs-select"></select>
+    <div class="vs-note">
+      <wicket:message key="NavigationPanel.workspaceHint">
+        留空表示编辑全局样式（仅管理员可写）。
+      </wicket:message>
+    </div>
+  </div>
+
+  <!-- ================= 样式列表 ================= -->
+  <div class="vs-block">
+    <div class="vs-block-title">
+      <wicket:message key="NavigationPanel.styles">样式列表</wicket:message>
+    </div>
+    <!-- ListView：styleItem 标签本身会被重复渲染；
+         点击链接组件 id 为 select，标题为其子组件 styleName -->
+    <div wicket:id="styleListContainer" class="vs-style-list">
+      <div wicket:id="styleItem" class="vs-style-item">
+        <a href="#" wicket:id="select" class="vs-style-row">
+          <span wicket:id="styleName">style</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 新建 / 复制 / 删除 ================= -->
+  <form wicket:id="actionForm" class="vs-block vs-actions">
+    <div class="vs-block-title">
+      <wicket:message key="NavigationPanel.manage">样式管理</wicket:message>
+    </div>
+
+    <div class="vs-field">
+      <label class="vs-label" for="vsNewStyleName">
+        <wicket:message key="NavigationPanel.newName">新样式名</wicket:message>
+      </label>
+      <input type="text" class="vs-input" id="vsNewStyleName" wicket:id="newStyleName"/>
+    </div>
+    <div class="vs-field">
+      <label class="vs-label" for="vsNewStyleFormat">
+        <wicket:message key="NavigationPanel.format">格式</wicket:message>
+      </label>
+      <select class="vs-input vs-select" id="vsNewStyleFormat" wicket:id="newStyleFormat"></select>
+    </div>
+    <div class="vs-btn-row">
+      <a href="#" class="vs-btn vs-btn-primary" wicket:id="createStyle">
+        <wicket:message key="NavigationPanel.create">新建样式</wicket:message>
+      </a>
+    </div>
+
+    <div class="vs-divider"></div>
+
+    <div class="vs-field">
+      <label class="vs-label" for="vsCopyStyleName">
+        <wicket:message key="NavigationPanel.copyName">副本名（留空自动生成）</wicket:message>
+      </label>
+      <input type="text" class="vs-input" id="vsCopyStyleName" wicket:id="copyStyleName"/>
+    </div>
+    <div class="vs-btn-row">
+      <a href="#" class="vs-btn" wicket:id="copyStyle">
+        <wicket:message key="NavigationPanel.copy">复制当前样式</wicket:message>
+      </a>
+      <a href="#" class="vs-btn vs-btn-danger" wicket:id="deleteStyle">
+        <wicket:message key="NavigationPanel.delete">删除当前样式</wicket:message>
+      </a>
+    </div>
+  </form>
+
+  <!-- ================= 图层绑定 ================= -->
+  <div class="vs-block">
+    <div class="vs-block-title">
+      <wicket:message key="NavigationPanel.bindLayer">绑定图层</wicket:message>
+    </div>
+    <select wicket:id="layerChoice" class="vs-input vs-select"></select>
+    <div class="vs-note">
+      <wicket:message key="NavigationPanel.bindLayerHint">
+        绑定图层后会自动读取要素字段、字段类型与栅格直方图，供分类设色与色带编辑使用。
+      </wicket:message>
+    </div>
+  </div>
+
+  <!-- ================= 图层元数据 ================= -->
+  <div class="vs-block" wicket:id="layerMetaContainer">
+    <div class="vs-block-title">
+      <wicket:message key="NavigationPanel.layerMeta">图层元数据</wicket:message>
+    </div>
+    <div class="vs-summary" wicket:id="rasterSummary">-</div>
+
+    <div class="vs-table-wrap">
+      <table class="vs-table">
+        <thead>
+        <tr>
+          <th><wicket:message key="NavigationPanel.fieldName">字段</wicket:message></th>
+          <th><wicket:message key="NavigationPanel.fieldType">类型</wicket:message></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr wicket:id="fieldRow">
+          <td wicket:id="fieldName">name</td>
+          <td wicket:id="fieldType">type</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="vs-hist" wicket:id="histogramBox">
+      <div class="vs-hist-title">
+        <wicket:message key="NavigationPanel.histogram">第 1 波段直方图</wicket:message>
+      </div>
+      <canvas id="vs-hist-canvas" width="240" height="70"></canvas>
+      <span class="vs-hidden" wicket:id="histogramJson">[]</span>
+    </div>
+  </div>
+
+</wicket:panel>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head/>
+<body>
+<wicket:panel>
+
+  <div class="vs-panel vs-panel-vector">
+
+    <!-- ============ 1. 符号类型 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="VectorSymbolizerPanel.kind">符号类型</wicket:message>
+      </div>
+      <div class="vs-radios">
+        <label class="vs-radio"><input type="radio" name="vs.symbolizerKind" value="point"/>
+          <span><wicket:message key="VectorSymbolizerPanel.point">点符号 PointSymbolizer</wicket:message></span></label>
+        <label class="vs-radio"><input type="radio" name="vs.symbolizerKind" value="line"/>
+          <span><wicket:message key="VectorSymbolizerPanel.line">线符号 LineSymbolizer</wicket:message></span></label>
+        <label class="vs-radio"><input type="radio" name="vs.symbolizerKind" value="polygon"/>
+          <span><wicket:message key="VectorSymbolizerPanel.polygon">面符号 PolygonSymbolizer</wicket:message></span></label>
+        <label class="vs-radio"><input type="radio" name="vs.symbolizerKind" value="raster"/>
+          <span><wicket:message key="VectorSymbolizerPanel.raster">栅格符号 RasterSymbolizer</wicket:message></span></label>
+      </div>
+    </div>
+
+    <!-- ============ 2. 单一符号 ============ -->
+    <div class="vs-block vs-block-single">
+      <div class="vs-block-title">
+        <wicket:message key="VectorSymbolizerPanel.single">单一符号</wicket:message>
+      </div>
+
+      <div class="vs-grid2">
+        <div class="vs-field vs-only-fill">
+          <label class="vs-label"><wicket:message key="VectorSymbolizerPanel.fill">填充色</wicket:message></label>
+          <div class="vs-color-row">
+            <input type="color" class="vs-color" data-target="vs.fillColor" value="#3d7ebb"/>
+            <input type="text" class="vs-input vs-hex" name="vs.fillColor" id="vs.fillColor" value="#3d7ebb"/>
+          </div>
+        </div>
+        <div class="vs-field vs-only-fill">
+          <label class="vs-label">
+            <wicket:message key="VectorSymbolizerPanel.fillOpacity">填充透明度</wicket:message>
+            <output class="vs-out" data-for="vs.fillOpacity">0.85</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.fillOpacity" id="vs.fillOpacity"
+                 min="0" max="1" step="0.01" value="0.85"/>
+        </div>
+
+        <div class="vs-field">
+          <label class="vs-label"><wicket:message key="VectorSymbolizerPanel.stroke">描边色</wicket:message></label>
+          <div class="vs-color-row">
+            <input type="color" class="vs-color" data-target="vs.strokeColor" value="#1f4e79"/>
+            <input type="text" class="vs-input vs-hex" name="vs.strokeColor" id="vs.strokeColor" value="#1f4e79"/>
+          </div>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="VectorSymbolizerPanel.strokeWidth">描边宽度</wicket:message>
+            <output class="vs-out" data-for="vs.strokeWidth">1</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.strokeWidth" id="vs.strokeWidth"
+                 min="0" max="20" step="0.5" value="1"/>
+        </div>
+
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="VectorSymbolizerPanel.strokeOpacity">描边透明度</wicket:message>
+            <output class="vs-out" data-for="vs.strokeOpacity">1</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.strokeOpacity" id="vs.strokeOpacity"
+                 min="0" max="1" step="0.01" value="1"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.strokeDashArray">
+            <wicket:message key="VectorSymbolizerPanel.dash">虚线样式（如 6 3）</wicket:message>
+          </label>
+          <input type="text" class="vs-input" name="vs.strokeDashArray" id="vs.strokeDashArray" value=""/>
+        </div>
+
+        <div class="vs-field">
+          <label class="vs-label" for="vs.strokeLineCap">
+            <wicket:message key="VectorSymbolizerPanel.lineCap">线端样式</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.strokeLineCap" id="vs.strokeLineCap">
+            <option value="butt">butt</option>
+            <option value="round">round</option>
+            <option value="square">square</option>
+          </select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.strokeLineJoin">
+            <wicket:message key="VectorSymbolizerPanel.lineJoin">拐角样式</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.strokeLineJoin" id="vs.strokeLineJoin">
+            <option value="mitre">mitre</option>
+            <option value="round">round</option>
+            <option value="bevel">bevel</option>
+          </select>
+        </div>
+
+        <div class="vs-field vs-field-check vs-only-fill">
+          <label class="vs-check">
+            <input type="checkbox" name="vs.fillEnabled" id="vs.fillEnabled" value="true"/>
+            <span><wicket:message key="VectorSymbolizerPanel.fillEnabled">显示填充</wicket:message></span>
+          </label>
+        </div>
+        <div class="vs-field vs-only-line">
+          <label class="vs-label">
+            <wicket:message key="VectorSymbolizerPanel.strokeOffset">描边偏移（像素）</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.strokeOffset" id="vs.strokeOffset"
+                 step="0.5" value="0"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 3. 点符号（Graphic） ============ -->
+    <div class="vs-block vs-block-point">
+      <div class="vs-block-title">
+        <wicket:message key="VectorSymbolizerPanel.pointGraphic">点符号 / 图标</wicket:message>
+      </div>
+      <div class="vs-grid2">
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="VectorSymbolizerPanel.pointSize">点大小</wicket:message>
+            <output class="vs-out" data-for="vs.pointSize">10</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.pointSize" id="vs.pointSize"
+                 min="1" max="64" step="1" value="10"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="VectorSymbolizerPanel.rotation">旋转角度</wicket:message>
+            <output class="vs-out" data-for="vs.pointRotation">0</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.pointRotation" id="vs.pointRotation"
+                 min="0" max="360" step="1" value="0"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.markShape">
+            <wicket:message key="VectorSymbolizerPanel.markShape">内置标记</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.markShape" id="vs.markShape">
+            <option value="circle">circle</option>
+            <option value="square">square</option>
+            <option value="triangle">triangle</option>
+            <option value="star">star</option>
+            <option value="cross">cross</option>
+            <option value="x">x</option>
+          </select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="VectorSymbolizerPanel.pointOpacity">点透明度</wicket:message>
+            <output class="vs-out" data-for="vs.pointOpacity">1</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.pointOpacity" id="vs.pointOpacity"
+                 min="0" max="1" step="0.01" value="1"/>
+        </div>
+
+        <div class="vs-field vs-span2">
+          <label class="vs-label" for="vs.externalGraphic">
+            <wicket:message key="VectorSymbolizerPanel.externalGraphic">外部图形 URL（SVG / PNG，留空使用内置标记）</wicket:message>
+          </label>
+          <input type="text" class="vs-input" name="vs.externalGraphic" id="vs.externalGraphic" value=""
+                 placeholder="styles/icon.svg 或 https://..."/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.externalGraphicFormat">
+            <wicket:message key="VectorSymbolizerPanel.externalFormat">外部图形 MIME</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.externalGraphicFormat" id="vs.externalGraphicFormat">
+            <option value="image/svg+xml">image/svg+xml</option>
+            <option value="image/png">image/png</option>
+            <option value="image/gif">image/gif</option>
+          </select>
+        </div>
+
+        <div class="vs-field">
+          <label class="vs-label"><wicket:message key="VectorSymbolizerPanel.markFill">标记填充色</wicket:message></label>
+          <div class="vs-color-row">
+            <input type="color" class="vs-color" data-target="vs.markFillColor" value="#ffffff"/>
+            <input type="text" class="vs-input vs-hex" name="vs.markFillColor" id="vs.markFillColor" value="#ffffff"/>
+          </div>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label"><wicket:message key="VectorSymbolizerPanel.markStroke">标记边框色</wicket:message></label>
+          <div class="vs-color-row">
+            <input type="color" class="vs-color" data-target="vs.markStrokeColor" value="#333333"/>
+            <input type="text" class="vs-input vs-hex" name="vs.markStrokeColor" id="vs.markStrokeColor" value="#333333"/>
+          </div>
+        </div>
+
+        <div class="vs-field">
+          <label class="vs-label" for="vs.sizeByField">
+            <wicket:message key="VectorSymbolizerPanel.sizeByField">按字段控制大小（气泡图，可空）</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.sizeByField" id="vs.sizeByField"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.sizeMin">
+            <wicket:message key="VectorSymbolizerPanel.sizeRange">大小区间（最小 / 最大）</wicket:message>
+          </label>
+          <div class="vs-inline">
+            <input type="number" class="vs-input vs-half" name="vs.sizeMin" id="vs.sizeMin" value="4" step="1"/>
+            <input type="number" class="vs-input vs-half" name="vs.sizeMax" id="vs.sizeMax" value="28" step="1"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 4. 分类 / 分级设色 ============ -->
+    <div class="vs-block vs-block-classify">
+      <div class="vs-block-title">
+        <wicket:message key="VectorSymbolizerPanel.classification">分类 / 分级设色</wicket:message>
+      </div>
+
+      <div class="vs-grid3">
+        <div class="vs-field">
+          <label class="vs-label" for="vs.classificationMethod">
+            <wicket:message key="VectorSymbolizerPanel.method">方式</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.classificationMethod" id="vs.classificationMethod">
+            <option value="single">单一符号</option>
+            <option value="unique">唯一值分类 UniqueValues</option>
+            <option value="equal">等间隔分级</option>
+            <option value="quantile">分位数分级</option>
+            <option value="jenks">自然断点 Jenks</option>
+            <option value="manual">手动断点</option>
+          </select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.classificationField">
+            <wicket:message key="VectorSymbolizerPanel.field">分类字段</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.classificationField" id="vs.classificationField"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.classCount">
+            <wicket:message key="VectorSymbolizerPanel.classCount">分级数</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.classCount" id="vs.classCount"
+                 min="1" max="64" step="1" value="5"/>
+        </div>
+      </div>
+
+      <div class="vs-field">
+        <label class="vs-label" for="vs.rampPreset">
+          <wicket:message key="VectorSymbolizerPanel.ramp">颜色渐变</wicket:message>
+        </label>
+        <div class="vs-inline">
+          <select class="vs-input vs-select vs-grow" name="vs.rampPreset" id="vs.rampPreset"></select>
+          <label class="vs-check vs-inline-check">
+            <input type="checkbox" name="vs.rampReversed" id="vs.rampReversed" value="true"/>
+            <span><wicket:message key="VectorSymbolizerPanel.reverse">反转</wicket:message></span>
+          </label>
+        </div>
+        <div class="vs-ramp-preview" id="vs-ramp-preview"></div>
+      </div>
+
+      <div class="vs-btn-row">
+        <a href="#" class="vs-btn vs-btn-primary" wicket:id="enumerateUnique">
+          <wicket:message key="VectorSymbolizerPanel.enumerate">枚举唯一值并配色</wicket:message>
+        </a>
+        <a href="#" class="vs-btn" wicket:id="classify">
+          <wicket:message key="VectorSymbolizerPanel.compute">计算分级断点</wicket:message>
+        </a>
+      </div>
+
+      <div class="vs-sub-title">
+        <wicket:message key="VectorSymbolizerPanel.breaks">分级 / 分类结果（可手动微调）</wicket:message>
+      </div>
+      <!-- 由 visualstyle.js 依据状态渲染 -->
+      <div class="vs-breaks" id="vs-breaks"></div>
+    </div>
+
+  </div>
+
+</wicket:panel>
+</body>
+</html>

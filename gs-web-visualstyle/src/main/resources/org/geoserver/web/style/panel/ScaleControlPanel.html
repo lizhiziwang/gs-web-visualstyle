@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head/>
+<body>
+<wicket:panel>
+
+  <div class="vs-panel vs-panel-scale">
+
+    <!-- ============ 比例尺控制 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="ScaleControlPanel.scale">比例尺控制 MinScaleDenominator / MaxScaleDenominator</wicket:message>
+      </div>
+
+      <label class="vs-check vs-big-check">
+        <input type="checkbox" name="vs.scaleEnabled" id="vs.scaleEnabled" value="true"/>
+        <span><wicket:message key="ScaleControlPanel.enable">启用比例尺可见范围</wicket:message></span>
+      </label>
+
+      <div class="vs-grid2">
+        <div class="vs-field">
+          <label class="vs-label" for="vs.minScale">
+            <wicket:message key="ScaleControlPanel.minScale">最小比例尺分母 （0 = 不限）</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.minScale" id="vs.minScale"
+                 min="0" step="1000" value="0"/>
+          <div class="vs-note" id="vs-min-scale-note">-</div>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.maxScale">
+            <wicket:message key="ScaleControlPanel.maxScale">最大比例尺分母 （0 = 不限）</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.maxScale" id="vs.maxScale"
+                 min="0" step="1000" value="0"/>
+          <div class="vs-note" id="vs-max-scale-note">-</div>
+        </div>
+      </div>
+
+      <div class="vs-sub-title">
+        <wicket:message key="ScaleControlPanel.quick">常用比例尺（点击设置起点）</wicket:message>
+      </div>
+      <div class="vs-chips" id="vs-scale-chips">
+        <button type="button" class="vs-chip" data-scale="1000">1:1 000</button>
+        <button type="button" class="vs-chip" data-scale="5000">1:5 000</button>
+        <button type="button" class="vs-chip" data-scale="10000">1:10 000</button>
+        <button type="button" class="vs-chip" data-scale="25000">1:25 000</button>
+        <button type="button" class="vs-chip" data-scale="50000">1:50 000</button>
+        <button type="button" class="vs-chip" data-scale="100000">1:100 000</button>
+        <button type="button" class="vs-chip" data-scale="500000">1:500 000</button>
+        <button type="button" class="vs-chip" data-scale="1000000">1:1 000 000</button>
+        <button type="button" class="vs-chip" data-scale="0">
+          <wicket:message key="ScaleControlPanel.unlimited">不限</wicket:message>
+        </button>
+      </div>
+      <div class="vs-note">
+        <wicket:message key="ScaleControlPanel.hint">
+          当前地图比例尺可在右侧预览左下角看到；只有落到可见区间内，图层才会被渲染。
+        </wicket:message>
+      </div>
+    </div>
+
+    <!-- ============ 图例预览 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="ScaleControlPanel.legend">图例实时预览</wicket:message>
+      </div>
+      <!-- 由 visualstyle.js 依据当前状态渲染（点/线/面/栅格 × 单符号/唯一值/分级） -->
+      <div class="vs-legend" id="vs-legend"></div>
+      <div class="vs-legend-actions">
+        <button type="button" class="vs-mini-btn" id="vs-legend-refresh">
+          <wicket:message key="ScaleControlPanel.refreshLegend">重新渲染图例</wicket:message>
+        </button>
+        <button type="button" class="vs-mini-btn" id="vs-legend-png">
+          <wicket:message key="ScaleControlPanel.exportLegend">导出 PNG</wicket:message>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</wicket:panel>
+</body>
+</html>

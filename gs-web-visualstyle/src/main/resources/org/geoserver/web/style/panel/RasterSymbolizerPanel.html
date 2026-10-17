@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head/>
+<body>
+<wicket:panel>
+
+  <div class="vs-panel vs-panel-raster">
+
+    <!-- ============ 1. 栅格模式 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="RasterSymbolizerPanel.mode">栅格符号化模式</wicket:message>
+      </div>
+      <div class="vs-radios">
+        <label class="vs-radio"><input type="radio" name="vs.rasterMode" value="gray"/>
+          <span><wicket:message key="RasterSymbolizerPanel.gray">单波段灰度</wicket:message></span></label>
+        <label class="vs-radio"><input type="radio" name="vs.rasterMode" value="rgb"/>
+          <span><wicket:message key="RasterSymbolizerPanel.rgb">多波段 RGB 合成</wicket:message></span></label>
+        <label class="vs-radio"><input type="radio" name="vs.rasterMode" value="colormap"/>
+          <span><wicket:message key="RasterSymbolizerPanel.colormap">连续色带 Colormap</wicket:message></span></label>
+        <label class="vs-radio"><input type="radio" name="vs.rasterMode" value="classified"/>
+          <span><wicket:message key="RasterSymbolizerPanel.classified">离散分级色带</wicket:message></span></label>
+        <label class="vs-radio"><input type="radio" name="vs.rasterMode" value="dem"/>
+          <span><wicket:message key="RasterSymbolizerPanel.dem">DEM 高程色阶</wicket:message></span></label>
+      </div>
+      <div class="vs-btn-row">
+        <a href="#" class="vs-btn vs-btn-primary" wicket:id="rasterStats">
+          <wicket:message key="RasterSymbolizerPanel.readStats">读取栅格统计与直方图</wicket:message>
+        </a>
+      </div>
+      <div class="vs-hist-box">
+        <canvas id="vs-raster-hist" width="560" height="110"></canvas>
+        <div class="vs-hist-legend" id="vs-raster-hist-legend"></div>
+      </div>
+    </div>
+
+    <!-- ============ 2. 通道选择 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="RasterSymbolizerPanel.channels">通道 / 波段</wicket:message>
+      </div>
+      <div class="vs-grid3">
+        <div class="vs-field">
+          <label class="vs-label" for="vs.grayBand">
+            <wicket:message key="RasterSymbolizerPanel.grayBand">灰度波段</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.grayBand" id="vs.grayBand"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.redBand">
+            <wicket:message key="RasterSymbolizerPanel.redBand">R 波段</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.redBand" id="vs.redBand"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.greenBand">
+            <wicket:message key="RasterSymbolizerPanel.greenBand">G 波段</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.greenBand" id="vs.greenBand"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.blueBand">
+            <wicket:message key="RasterSymbolizerPanel.blueBand">B 波段</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.blueBand" id="vs.blueBand"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="RasterSymbolizerPanel.opacity">栅格透明度</wicket:message>
+            <output class="vs-out" data-for="vs.rasterOpacity">1</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.rasterOpacity" id="vs.rasterOpacity"
+                 min="0" max="1" step="0.01" value="1"/>
+        </div>
+        <div class="vs-field vs-field-check">
+          <label class="vs-check">
+            <input type="checkbox" name="vs.channelSelectionEnabled" id="vs.channelSelectionEnabled" value="true"/>
+            <span><wicket:message key="RasterSymbolizerPanel.channelEnable">显式输出通道选择</wicket:message></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 3. 对比度拉伸 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="RasterSymbolizerPanel.stretch">直方图拉伸 / 对比度增强</wicket:message>
+      </div>
+      <label class="vs-check">
+        <input type="checkbox" name="vs.stretchEnabled" id="vs.stretchEnabled" value="true"/>
+        <span><wicket:message key="RasterSymbolizerPanel.stretchEnable">启用 ContrastEnhancement</wicket:message></span>
+      </label>
+      <div class="vs-grid3">
+        <div class="vs-field">
+          <label class="vs-label" for="vs.stretchType">
+            <wicket:message key="RasterSymbolizerPanel.stretchType">方式</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.stretchType" id="vs.stretchType">
+            <option value="normalize">归一化 normalize</option>
+            <option value="histogram">直方图均衡 histogram</option>
+            <option value="logarithmic">对数 logarithmic</option>
+            <option value="exponential">指数 exponential</option>
+            <option value="none">不拉伸 none</option>
+          </select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.stretchMin">
+            <wicket:message key="RasterSymbolizerPanel.stretchMin">值域下限</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.stretchMin" id="vs.stretchMin" value="0" step="any"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.stretchMax">
+            <wicket:message key="RasterSymbolizerPanel.stretchMax">值域上限</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.stretchMax" id="vs.stretchMax" value="255" step="any"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label">
+            <wicket:message key="RasterSymbolizerPanel.gamma">Gamma 校正</wicket:message>
+            <output class="vs-out" data-for="vs.gamma">1</output>
+          </label>
+          <input type="range" class="vs-range" name="vs.gamma" id="vs.gamma"
+                 min="0.1" max="4" step="0.05" value="1"/>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.stretchNormalize">
+            <wicket:message key="RasterSymbolizerPanel.normalize">归一化策略</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.stretchNormalize" id="vs.stretchNormalize">
+            <option value="stretchToMinimumMaximum">拉伸到最值</option>
+            <option value="clipToMinimumMaximum">裁剪到最值</option>
+            <option value="none">不归一化</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 4. 色带编辑器 ============ -->
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="RasterSymbolizerPanel.ramp">色带编辑器</wicket:message>
+      </div>
+
+      <div class="vs-grid3">
+        <div class="vs-field">
+          <label class="vs-label" for="vs.rampPreset">
+            <wicket:message key="RasterSymbolizerPanel.preset">色带预设</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.rampPreset" id="vs-ramp-preset-raster"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.demPalette">
+            <wicket:message key="RasterSymbolizerPanel.demPalette">DEM 高程色阶</wicket:message>
+          </label>
+          <select class="vs-input vs-select" name="vs.demPalette" id="vs.demPalette"></select>
+        </div>
+        <div class="vs-field">
+          <label class="vs-label" for="vs.rampIntervals">
+            <wicket:message key="RasterSymbolizerPanel.intervals">离散分级数</wicket:message>
+          </label>
+          <input type="number" class="vs-input" name="vs.rampIntervals" id="vs.rampIntervals"
+                 min="2" max="64" step="1" value="8"/>
+        </div>
+        <div class="vs-field vs-field-check">
+          <label class="vs-check">
+            <input type="checkbox" name="vs.rampContinuous" id="vs.rampContinuous" value="true"/>
+            <span><wicket:message key="RasterSymbolizerPanel.continuous">连续色带（interpolate）</wicket:message></span>
+          </label>
+        </div>
+        <div class="vs-field vs-field-check">
+          <label class="vs-check">
+            <input type="checkbox" name="vs.rampReversed" id="vs-ramp-reversed-raster" value="true"/>
+            <span><wicket:message key="RasterSymbolizerPanel.reverse">反转色带</wicket:message></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="vs-sub-title">
+        <wicket:message key="RasterSymbolizerPanel.stops">色带控制点（可拖拽调整位置）</wicket:message>
+      </div>
+      <!-- 由 colormap.js 渲染：渐变条 + 可拖拽手柄 + 控制点列表 -->
+      <div class="vs-ramp" id="vs-ramp"></div>
+      <div class="vs-ramp-actions">
+        <button type="button" class="vs-mini-btn" id="vs-ramp-add">添加控制点</button>
+        <button type="button" class="vs-mini-btn" id="vs-ramp-even">均匀分布</button>
+        <button type="button" class="vs-mini-btn" id="vs-ramp-reset">重置为预设</button>
+      </div>
+      <div class="vs-note">
+        <wicket:message key="RasterSymbolizerPanel.stopsNote">
+          留空控制点表示直接使用上面的预设色带；一旦手动编辑，即以自定义控制点为准。
+        </wicket:message>
+      </div>
+    </div>
+
+  </div>
+
+</wicket:panel>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head/>
+<body>
+<wicket:panel>
+
+  <div class="vs-panel vs-panel-preview">
+
+    <div class="vs-preview-head">
+      <span class="vs-preview-title">
+        <wicket:message key="PreviewPanel.title">实时预览</wicket:message>
+      </span>
+      <div class="vs-preview-actions">
+        <a href="#" class="vs-mini-btn" wicket:id="refreshPreview">
+          <wicket:message key="PreviewPanel.refresh">刷新</wicket:message>
+        </a>
+        <a href="#" class="vs-mini-btn" wicket:id="resetView">
+          <wicket:message key="PreviewPanel.reset">复位</wicket:message>
+        </a>
+        <a href="#" class="vs-mini-btn" wicket:id="toggleBaseMap">
+          <wicket:message key="PreviewPanel.baseMap">底图</wicket:message>
+        </a>
+      </div>
+    </div>
+
+    <div class="vs-map-wrap">
+      <div wicket:id="mapContainer" id="vs-map" class="vs-map"></div>
+      <div class="vs-map-badge" id="vs-map-scale">-</div>
+      <div class="vs-map-mask" id="vs-map-mask">
+        <span id="vs-map-mask-text">
+          <wicket:message key="PreviewPanel.loading">正在加载预览…</wicket:message>
+        </span>
+      </div>
+    </div>
+
+    <div class="vs-preview-foot">
+      <div class="vs-preview-row">
+        <span class="vs-k">
+          <wicket:message key="PreviewPanel.layer">图层</wicket:message>
+        </span>
+        <span class="vs-v" id="vs-preview-layer">-</span>
+      </div>
+      <div class="vs-preview-row">
+        <span class="vs-k">
+          <wicket:message key="PreviewPanel.style">样式</wicket:message>
+        </span>
+        <span class="vs-v" id="vs-preview-style">-</span>
+        <span class="vs-tag" id="vs-preview-mode">SLD_BODY</span>
+      </div>
+    </div>
+
+    <div class="vs-legend-mini">
+      <div class="vs-block-title">
+        <wicket:message key="PreviewPanel.legend">图例</wicket:message>
+      </div>
+      <!-- 与「比例尺控制」页共用同一套图例渲染逻辑 -->
+      <div class="vs-legend" id="vs-legend-mini"></div>
+    </div>
+
+  </div>
+
+</wicket:panel>
+</body>
+</html>

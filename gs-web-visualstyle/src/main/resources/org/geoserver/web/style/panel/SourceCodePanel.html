@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head/>
+<body>
+<wicket:panel>
+
+  <div class="vs-panel vs-panel-source">
+
+    <div class="vs-block">
+      <div class="vs-block-title">
+        <wicket:message key="SourceCodePanel.title">样式源码（可编辑）</wicket:message>
+      </div>
+      <div class="vs-note">
+        <wicket:message key="SourceCodePanel.hint">
+          编辑器为 GeoServer 原生组件：SLD 模式下具备标签自动补全与语法高亮。
+          点击「源码 → 表单」会把源码解析为 SLD 对象模型并回填可视化表单；
+          点击「表单 → 源码」会按当前表单重新生成 SLD 1.1.0 覆盖此处内容。
+        </wicket:message>
+      </div>
+
+      <div class="vs-editor-wrap">
+        <div wicket:id="sourceEditor"></div>
+      </div>
+
+      <div class="vs-btn-row">
+        <a href="#" class="vs-btn vs-btn-primary" wicket:id="applySource">
+          <wicket:message key="SourceCodePanel.applySource">源码 → 表单</wicket:message>
+        </a>
+        <a href="#" class="vs-btn" wicket:id="resetSource">
+          <wicket:message key="SourceCodePanel.resetSource">表单 → 源码</wicket:message>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</wicket:panel>
+</body>
+</html>
