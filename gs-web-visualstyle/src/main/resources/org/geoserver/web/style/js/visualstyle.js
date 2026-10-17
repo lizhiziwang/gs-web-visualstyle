@@ -308,9 +308,8 @@
     VS.onMetadata = function (meta) {
         if (!meta) { return; }
         metadata = meta || metadata;
-        fillFieldSelect('vs.classificationField', metadata.fields, false, true);
-        fillFieldSelect('vs.sizeByField', metadata.fields, true, true);
-        fillFieldSelect('vs-label-field-picker', metadata.fields, true, true);
+        refreshFieldSelects();
+        fillFontList();
         fillBandSelects();
         var lbl = $('vs-preview-layer');
         if (lbl) { lbl.textContent = metadata.layer || '-'; }
@@ -1219,6 +1218,41 @@
     // 10. 渲染辅助
     // ==================================================================
 
+    /**
+     * 统一补填「字段下拉 / 字段插入器」。
+     *
+     * ⚠ 这些控件分布在懒渲染的页签面板里（矢量符号化、标注）：onMetadata 下发时
+     * 非激活页签的 DOM 还不存在，fillFieldSelect 拿不到元素直接 return，
+     * 等用户切到该页签（面板由 Wicket 后渲染）时选项仍然是空的
+     * （现象：标注页签「插入字段…」下拉一个选项都没有，用户选不到字段，
+     *   也就配不出标注 —— 被感知为「配置标注不生效」）。
+     * 因此除了 onMetadata 之外，面板首次出现时（enhanceDynamicPanels）必须再补一次。
+     */
+    function refreshFieldSelects() {
+        var fields = (metadata && metadata.fields) ? metadata.fields : [];
+        if (!fields.length) { return; }
+        fillFieldSelect('vs.classificationField', fields, false, true);
+        fillFieldSelect('vs.sizeByField', fields, true, true);
+        fillFieldSelect('vs-label-field-picker', fields, true, true);
+    }
+
+    /**
+     * 字体族候选列表（服务端下发 JVM 实际可用的字体族名）。
+     *
+     * ⚠ 写一个环境里不存在的字体名时，渲染器回退到默认字体，中文会画成空心方块
+     * （观感像「乱码」，实际是缺字形）。因此列表要用服务端的真实字体，
+     * 且它位于懒渲染的标注页签，面板出现时要补填。
+     */
+    function fillFontList() {
+        var dl = $('vs-font-list');
+        if (!dl) { return; }
+        var fonts = (metadata && metadata.fonts) ? metadata.fonts : [];
+        if (!fonts.length) { return; }
+        dl.innerHTML = fonts.map(function (f) {
+            return '<option value="' + esc(f) + '"></option>';
+        }).join('');
+    }
+
     function fillFieldSelect(id, fields, withEmpty, preserveValue) {
         var el = $(id);
         if (!el) { return; }
@@ -1346,14 +1380,22 @@
             var freshBreaks = firstSeen($('vs-breaks'));
             var freshLegend = firstSeen($('vs-legend'));
             var freshScale = firstSeen($('vs.minScale'));
+            // 懒渲染页签（标注 / 矢量）里的字段控件：出现时也要补填选项
+            var freshLabelPicker = firstSeen($('vs-label-field-picker'));
+            var freshClassField = firstSeen($('vs.classificationField'));
+            var freshFontList = firstSeen($('vs-font-list'));
 
             if (!freshBand && !freshRamp && !freshRampHost && !freshBreaks
-                && !freshLegend && !freshScale) {
+                && !freshLegend && !freshScale && !freshLabelPicker && !freshClassField
+                && !freshFontList) {
                 return;
             }
 
             if (freshBand) { fillBandSelects(); }
             if (freshRamp) { fillRampSelects(); }
+            // 懒渲染面板里的字段下拉/插入器在这里补填（见 refreshFieldSelects 注释）
+            if (freshLabelPicker || freshClassField) { refreshFieldSelects(); }
+            if (freshFontList) { fillFontList(); }
 
             // 新面板里的控件都是「出厂默认值」，先按当前状态回填，再重绘依赖状态的视图
             if (!pushPending) { applyStateToForm(state); }

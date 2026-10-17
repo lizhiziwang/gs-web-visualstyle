@@ -1278,6 +1278,7 @@ public class VisualStyleEditorPage extends GeoServerSecuredPage {
             fields.add(fm);
         }
         m.put("fields", fields);
+        m.put("fonts", availableFonts());
 
         LayerInfo layer = resolveLayerForAnalysis();
         m.put("layer", layer == null ? "" : layer.prefixedName());
@@ -1286,6 +1287,30 @@ public class VisualStyleEditorPage extends GeoServerSecuredPage {
         m.put("suggestedKind", layer == null ? "polygon"
                 : EditorContext.metadata().suggestSymbolizerKind(layer));
         return Json.write(m);
+    }
+
+    /**
+     * JVM 实际可用的字体族名（用于前端「字体族」输入框的候选列表）。
+     *
+     * <p>为什么需要：SLD 里写了环境里不存在的字体时，渲染器会回退到默认字体，
+     * 中文就会画成空心方块（看着像「乱码」，实际是缺字形）。把真实可用的列表
+     * 下发给前端，用户可以直接挑，不必猜。
+     */
+    private static List<Object> availableFonts() {
+        List<Object> out = new ArrayList<>();
+        try {
+            String[] names = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
+                    .getAvailableFontFamilyNames();
+            java.util.Arrays.sort(names, String.CASE_INSENSITIVE_ORDER);
+            for (String n : names) {
+                if (n != null && !n.isBlank()) {
+                    out.add(n);
+                }
+            }
+        } catch (Throwable t) {
+            // 无图形环境等极端情况：返回空列表即可，前端候选列表为空不影响手填
+        }
+        return out;
     }
 
     /** 波段数量：Coverage 用维度数快速取得，避免读取栅格。 */

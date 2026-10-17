@@ -56,7 +56,10 @@
             <wicket:message key="TextSymbolizerPanel.family">字体族（逗号分隔，按序回退）</wicket:message>
           </label>
           <input type="text" class="vs-input" name="vs.fontFamily" id="vs.fontFamily"
+                 list="vs-font-list"
                  value="Microsoft YaHei, Noto Sans CJK SC, DejaVu Sans, sans-serif"/>
+          <!-- 服务器实际可用字体（服务端下发），避免填了环境里不存在的字体 → 渲染成方块 -->
+          <datalist id="vs-font-list"></datalist>
         </div>
         <div class="vs-field">
           <label class="vs-label">

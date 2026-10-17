@@ -155,8 +155,29 @@ INFO [web.style] - [gs-web-visualstyle] 页面已挂载: /geoserver/web/visualst
 | 比例尺控制             | `MinScaleDenominator` / `MaxScaleDenominator` 数值 + 常用比例尺快捷 chips + 可读提示；**图例实时预览**（单符号/唯一值/分级/栅格四种形态，SVG 绘制，可导出）                                                                                      |
 | 高级源码              | 复用 GeoServer 原生 **CodeMirrorEditor**：SLD 模式 `text/sld10`（标签自动补全）、GeoCSS 模式 `text/geocss`；行号、查找替换、跳转行、格式化；**「源码 → 表单」**&#x89E3;析回填、**「表单 → 源码」**&#x91CD;新生成                                            |
 
-### 右侧预览（`PreviewPanel`）
+### ⚠ 标注中文显示为空心方块 —— 服务器缺中文字体
 
+GeoServer 官方镜像**只带 DejaVu 字体，没有任何中文字体**。标注里出现中文时，
+渲染器找不到字形就画成空心方块（观感像「乱码」，实际不是编码问题：SLD 是 UTF-8，
+数据源 charset 也正确）。
+
+解决（任选其一）：
+
+```bash
+# 1) 直接给运行中的容器装（最快；docker restart 保留，重建容器会丢）
+bash tools/install_cjk_fonts.sh            # 等价于 apt-get install fonts-noto-cjk
+
+# 2) 永久生效：在自己的镜像里装
+#    RUN apt-get update && apt-get install -y fonts-noto-cjk
+```
+
+装完后「标注」页签的**字体族**填 `Noto Sans CJK SC` 即可（插件会把服务器
+实际可用的字体族名下发到输入框的候选列表里，可直接选，不必凭猜测填）。
+字体族支持逗号分隔按序回退，默认值
+`Microsoft YaHei, Noto Sans CJK SC, DejaVu Sans, sans-serif` 在 Windows 服务器
+与 Linux 容器上都能命中。
+
+### 右侧预览（`PreviewPanel`）
 - 内嵌 OpenLayers，复用 GeoServer 自带的 `/geoserver/openlayers3/ol.js` + `ol.css`
 - **真实所见即所得**：预览用 `SLD_BODY` 把**尚未保存**的样式交给 WMS 渲染；  
   由于 SLD 可能超出 GET 的 URL 长度限制，通过 OpenLayers 的 `imageLoadFunction`  

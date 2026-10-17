@@ -259,7 +259,11 @@ public class StyleCompiler implements Serializable {
             default:
                 break;
         }
-        if (kind.isVector() && state.isLabelEnabled() && brk == null) {
+        // ⚠ 标注必须挂到「每一条规则」上，不能只在单一符号（brk == null）时挂：
+        // 分类（枚举唯一值）/ 分级样式每条规则都带自己的 Filter，逐规则调用本方法时
+        // brk 不为 null，若把标注限制在 brk == null，分类样式的标注就永远不会生成——
+        // 现象是「勾了启用标注、填了字段，预览和保存后都没有标注」（用户实际踩到）。
+        if (kind.isVector() && state.isLabelEnabled()) {
             TextSymbolizer ts = buildText(state);
             if (ts != null) {
                 out.add(ts);
@@ -1196,20 +1200,62 @@ public class StyleCompiler implements Serializable {
             }
             return r;
         }
+        // 裸比较：唯一值分类就是单个 PropertyIsEqualTo（不包在 And 里）。
+        // 早期这里只处理 And，导致重新打开「枚举唯一值并配色」生成的样式时
+        // 一条断点都识别不出来（状态栏 0 条规则、分类表格空、保存会把分类压平）。
+        Range single = extractComparison(filter);
+        if (single != null) {
+            if (single.equality) {
+                return single;
+            }
+            // 单边界比较：缺的另一侧按无穷处理
+            if (single.lower) {
+                single.max = Double.POSITIVE_INFINITY;
+            } else {
+                single.min = Double.NEGATIVE_INFINITY;
+            }
+            return single;
+        }
         return null;
     }
 
+    /**
+     * 从单个比较过滤器提取「字段 + 等值 / 单侧边界」。
+     *
+     * <p>⚠ 等值分支不能要求字面量可转数值：唯一值分类的值几乎都是字符串
+     * （{@code fclass=cycleway}）。早期实现统一走 {@code asDoubleObj}，
+     * 字符串分类的规则会被判成「无法识别」而全部丢弃。
+     */
     private Range extractComparison(Filter filter) {
         if (!(filter instanceof org.geotools.api.filter.BinaryComparisonOperator)) {
             return null;
         }
         org.geotools.api.filter.BinaryComparisonOperator op =
                 (org.geotools.api.filter.BinaryComparisonOperator) filter;
-        String field = asString(op.getExpression1(), null);
+
+        if (filter instanceof org.geotools.api.filter.PropertyIsEqualTo) {
+            String field = propertyOf(op.getExpression1());
+            String value = literalToText(op.getExpression2());
+            if (field == null || value == null || value.isEmpty()) {
+                // 兼容字面量在左侧
+                field = propertyOf(op.getExpression2());
+                value = literalToText(op.getExpression1());
+            }
+            if (field == null || value == null || value.isEmpty()) {
+                return null;
+            }
+            Range r = new Range();
+            r.field = field;
+            r.equality = true;
+            r.value = value;
+            return r;
+        }
+
+        String field = propertyOf(op.getExpression1());
         Double value = asDoubleObj(op.getExpression2());
-        if (value == null) {
+        if (field == null || value == null) {
             // 兼容 literal 在左侧
-            field = asString(op.getExpression2(), null);
+            field = propertyOf(op.getExpression2());
             value = asDoubleObj(op.getExpression1());
         }
         if (field == null || value == null) {
@@ -1217,11 +1263,6 @@ public class StyleCompiler implements Serializable {
         }
         Range r = new Range();
         r.field = field;
-        if (filter instanceof org.geotools.api.filter.PropertyIsEqualTo) {
-            r.equality = true;
-            r.value = literalToText(op.getExpression2());
-            return r;
-        }
         if (filter instanceof org.geotools.api.filter.PropertyIsGreaterThanOrEqualTo) {
             r.min = value.doubleValue();
             r.lower = true;
@@ -1243,6 +1284,24 @@ public class StyleCompiler implements Serializable {
             return r;
         }
         LOGGER.log(Level.FINEST, "未识别的比较过滤器: {0}", filter.getClass().getName());
+        return null;
+    }
+
+    /** 仅当表达式确实是属性引用时返回字段名（字面量不能当字段名用）。 */
+    private String propertyOf(Expression e) {
+        if (e == null) {
+            return null;
+        }
+        if (e instanceof org.geotools.api.filter.expression.PropertyName) {
+            return ((org.geotools.api.filter.expression.PropertyName) e).getPropertyName();
+        }
+        if (e instanceof org.geotools.api.filter.expression.Literal) {
+            return null;
+        }
+        String s = e.toString();
+        if (s.startsWith("[") && s.endsWith("]")) {
+            return s.substring(1, s.length() - 1);
+        }
         return null;
     }
 
